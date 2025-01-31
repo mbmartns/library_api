@@ -42,9 +42,20 @@ defmodule LibraryApiWeb do
         layouts: [html: LibraryApiWeb.Layouts]
 
       import Plug.Conn
+      alias LibraryApiWeb.Router.Helpers, as: Routes
       use Gettext, backend: LibraryApiWeb.Gettext
 
       unquote(verified_routes())
+    end
+  end
+
+  def view do
+    quote do
+      use Phoenix.View,
+        root: "lib/library_api_web/templates",
+        namespace: LibraryApiWeb
+
+      import Phoenix.View
     end
   end
 
