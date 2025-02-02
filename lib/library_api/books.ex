@@ -74,10 +74,7 @@ defmodule LibraryApi.Books do
     |> Repo.update()
   end
 
-    # Função pública
-    def get_book_by_isbn!(isbn) do
-      Repo.get_by!(Book, isbn: isbn)
-    end
+
 
 
   @doc """
@@ -109,19 +106,22 @@ defmodule LibraryApi.Books do
     Book.changeset(book, attrs)
   end
 
-
-
-  # Custom function to get a book by ISBN
   def get_book_by_isbn(isbn) do
-    Repo.get_by(Book, isbn: isbn)
+    case isbn do
+      nil -> {:ok, nil}  
+      _ ->
+        case Repo.get_by(Book, isbn: isbn) do
+          nil -> {:error, "Livro não encontrado com o ISBN fornecido"}
+          book -> {:ok, book}
+        end
+    end
   end
 
-  # Custom function to list books by author
+
   def list_books_by_author(author) do
     Repo.all(from b in Book, where: b.author == ^author)
   end
 
-  # Custom function to update the book's year
   def update_book_year(id, year) do
     book = Repo.get!(Book, id)
 
